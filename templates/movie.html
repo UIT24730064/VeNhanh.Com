@@ -1,0 +1,67 @@
+<div class="container">
+  <h2 class="section-title">Phim đang chiếu</h2>
+  <div class="movie-grid">
+    {% for movie in showing_movies %}
+    <div class="movie-card">
+      <a href="{{ url_for('movie_detail', id=movie.id) }}" class="movie-link">
+        <div class="poster-box">
+          <img src="{{ url_for('static', filename='images/' + movie.image) }}" alt="{{ movie.title }}">
+          <div class="overlay">
+            <span class="btn">🎟 Mua vé</span>
+          </div>
+        </div>
+        <div class="movie-info">
+          <h3>{{ movie.title }}</h3>
+          <span class="tag now-showing">Đang chiếu</span>
+        </div>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+
+  <h2 class="section-title">Phim sắp chiếu</h2>
+  <div class="movie-grid">
+    {% for movie in upcoming_movies %}
+    <div class="movie-card">
+      <a href="{{ url_for('movie_detail', id=movie.id) }}" class="movie-link">
+        <div class="poster-box">
+          <img src="{{ url_for('static', filename='images/' + movie.image) }}" alt="{{ movie.title }}">
+          <div class="overlay">
+            <span class="btn">🎟 Chi tiết</span>
+          </div>
+        </div>
+        <div class="movie-info">
+          <h3>{{ movie.title }}</h3>
+          <span class="tag upcoming">Sắp chiếu</span>
+        </div>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+<section class="upcoming-movies">
+  <h2 class="section-title">Phim sắp chiếu</h2>
+  
+  <div class="movie-grid">
+    {% for movie in movies if movie.status == 'upcoming' %}
+    <div class="movie-card">
+      <a href="#" class="movie-link">
+        <div class="poster-box">
+          <img src="{{ url_for('static', filename='images/' + movie.image) }}" alt="{{ movie.title }}">
+          
+          <div class="overlay">
+            <span class="btn">🎟 Xem chi tiết</span>
+          </div>
+        </div>
+        
+        <div class="movie-info">
+          <h3>{{ movie.title }}</h3>
+          <span class="tag upcoming">Sắp chiếu</span>
+        </div>
+      </a>
+    </div>
+    {% else %}
+    <p>Hiện chưa có phim nào sắp chiếu.</p>
+    {% endfor %}
+  </div>
+</section>

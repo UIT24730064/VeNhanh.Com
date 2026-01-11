@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - Movie Booking{% endblock %}
+
+{% block content %}
+<div class="admin-dashboard">
+    <h1>Admin Dashboard</h1>
+    
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">📊</div>
+            <div class="stat-content">
+                <h3>Tổng đơn đặt</h3>
+                <p class="stat-number">{{ total_bookings }}</p>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-content">
+                <h3>Tổng người dùng</h3>
+                <p class="stat-number">{{ total_users }}</p>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">🎬</div>
+            <div class="stat-content">
+                <h3>Tổng phim</h3>
+                <p class="stat-number">{{ total_movies }}</p>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">💰</div>
+            <div class="stat-content">
+                <h3>Doanh thu</h3>
+                <p class="stat-number">{{ "{:,.0f}".format(revenue) }} đ</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-actions">
+        <h2>Quản lý</h2>
+        <ul>
+            <li><a href="#" class="btn btn-primary">Quản lý phim</a></li>
+            <li><a href="#" class="btn btn-primary">Quản lý lịch chiếu</a></li>
+            <li><a href="#" class="btn btn-primary">Quản lý người dùng</a></li>
+            <li><a href="#" class="btn btn-primary">Xem báo cáo</a></li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

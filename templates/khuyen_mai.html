@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Khuyến Mãi Hấp Dẫn - Vé Nhanh{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row mb-5 text-center">
+        <h2 class="fw-bold brand-red text-uppercase">Chương Trình Khuyến Mãi</h2>
+        <p class="text-muted">Đừng bỏ lỡ các ưu đãi cực khủng dành riêng cho thành viên Vé Nhanh</p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 border-0 shadow-sm promo-card">
+                <div class="position-relative overflow-hidden">
+                    <img src="{{ url_for('static', filename='images/promo_monday.jpg') }}" class="card-img-top" alt="Thứ 2 đồng giá" onerror="this.src='https://via.placeholder.com/600x300?text=Thu+Hai+Dong+Gia'">
+                    <span class="badge bg-danger position-absolute top-0 start-0 m-3 px-3 py-2 rounded-pill shadow">HOT</span>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">Thứ Hai Đồng Giá 45K</h5>
+                    <p class="card-text text-muted small">Tận hưởng ngày đầu tuần với giá vé cực sốc chỉ 45.000 VNĐ cho mọi suất chiếu 2D.</p>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <span class="text-danger fw-bold small"><i class="far fa-clock me-1"></i> Mỗi Thứ 2</span>
+                        <a href="#" class="btn btn-danger btn-sm rounded-pill px-3 fw-bold">Chi tiết</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 border-0 shadow-sm promo-card">
+                <div class="position-relative overflow-hidden">
+                    <img src="{{ url_for('static', filename='images/promo_combo.jpg') }}" class="card-img-top" alt="Combo bắp nước" onerror="this.src='https://via.placeholder.com/600x300?text=Uu+Dai+Combo'">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">Combo Bắp Nước - Giảm 20%</h5>
+                    <p class="card-text text-muted small">Đặt kèm Combo bắp nước khi mua vé trực tuyến để nhận ngay ưu đãi giảm giá 20% trên tổng hóa đơn.</p>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <span class="text-danger fw-bold small"><i class="fas fa-percent me-1"></i> Giảm 20%</span>
+                        <a href="#" class="btn btn-danger btn-sm rounded-pill px-3 fw-bold">Chi tiết</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 border-0 shadow-sm promo-card">
+                <div class="position-relative overflow-hidden">
+                    <img src="{{ url_for('static', filename='images/promo_student.jpg') }}" class="card-img-top" alt="Ưu đãi HSSV" onerror="this.src='https://via.placeholder.com/600x300?text=Uu+Dai+HSSV'">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">Đồng Giá HSSV - 50K</h5>
+                    <p class="card-text text-muted small">Dành cho học sinh, sinh viên khi xuất trình thẻ tại quầy hoặc đăng ký tài khoản thành viên HSSV.</p>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <span class="text-danger fw-bold small"><i class="fas fa-user-graduate me-1"></i> Học sinh - SV</span>
+                        <a href="#" class="btn btn-danger btn-sm rounded-pill px-3 fw-bold">Chi tiết</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-5 mb-5">
+        <div class="col-12 text-center p-5 bg-dark text-white rounded-4 shadow-lg call-to-action">
+            <h2 class="fw-bold mb-3">Chưa là thành viên Vé Nhanh?</h2>
+            <p class="mb-4 opacity-75">Đăng ký ngay hôm nay để nhận voucher giảm giá <span class="text-warning fw-bold">50%</span> cho lần đặt vé đầu tiên!</p>
+            <a href="{{ url_for('register') }}" class="btn btn-danger btn-lg rounded-pill px-5 fw-bold shadow">ĐĂNG KÝ NGAY</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

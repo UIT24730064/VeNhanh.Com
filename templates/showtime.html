@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5 mt-4"> 
+    <div class="row g-4"> <div class="col-md-4 col-lg-3">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden sticky-top" style="top: 100px; z-index: 5;">
+                <img src="{{ url_for('static', filename='images/' + movie.image) }}" 
+                     class="img-fluid w-100" alt="{{ movie.title }}" 
+                     style="aspect-ratio: 2/3; object-fit: cover;">
+                <div class="card-body p-2 bg-dark text-white text-center">
+                    <h6 class="fw-bold mb-0 small text-truncate">{{ movie.title }}</h6>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8 col-lg-9">
+            <div class="bg-white p-3 p-md-4 border rounded-4 shadow-sm">
+                <h5 class="fw-bold mb-3 text-uppercase border-bottom pb-2 text-danger">Lịch Chiếu Toàn Quốc</h5>
+                
+                {% if showtimes %}
+                    {% set current_date = "" %}
+                    {% for st in showtimes %}
+                        {# Nhóm theo ngày #}
+                        {% if st.show_date.strftime('%d/%m/%Y') != current_date %}
+                            <div class="date-header mt-4 mb-2">
+                                <span class="badge bg-secondary rounded-pill px-3 py-2">
+                                    <i class="fas fa-calendar-day me-1"></i> {{ st.show_date.strftime('%d/%m/%Y') }}
+                                </span>
+                            </div>
+                            {% set current_date = st.show_date.strftime('%d/%m/%Y') %}
+                        {% endif %}
+
+                        <div class="showtime-item d-flex align-items-center justify-content-between p-2 border rounded-3 mb-2 hover-effect">
+                            <div class="ps-2">
+                                <span class="fw-bold d-block text-dark" style="font-size: 0.9rem;">{{ st.theater }}</span>
+                                <small class="text-muted" style="font-size: 0.75rem;">
+                                    <i class="fas fa-chair me-1"></i>Ghế trống: {{ st.get_available_seats() if st.get_available_seats else "60" }}
+                                </small>
+                            </div>
+                            <div class="text-end pe-2">
+                                <span class="fw-bold text-danger me-2" style="font-size: 0.85rem;">{{ "{:,.0f}".format(st.price) }}đ</span>
+                                <a href="{{ url_for('seats', showtime_id=st.id) }}" class="btn btn-danger btn-sm rounded-2 fw-bold px-3 py-1 shadow-sm">
+                                    {{ st.show_time.strftime('%H:%M') }}
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center py-5">
+                        <p class="text-muted">Chưa có lịch chiếu khả dụng.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+    </div> </div> <style>
+    /* Khoảng cách an toàn cho sticky poster khi cuộn */
+    .sticky-top { transition: top 0.3s; }
+    
+    .hover-effect { transition: 0.2s; background-color: #fff; }
+    .hover-effect:hover { 
+        background-color: #fff5f5; 
+        border-color: #dc3545 !important;
+        transform: translateX(5px);
+    }
+</style>
+{% endblock %}

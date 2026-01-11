@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Hồ sơ - Movie Booking{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <h1>Hồ sơ của bạn</h1>
+    
+    <div class="profile-info">
+        <h2>Thông tin cá nhân</h2>
+        <p><strong>Tên đăng nhập:</strong> {{ current_user.username }}</p>
+        <p><strong>Email:</strong> {{ current_user.email }}</p>
+        <p><strong>Vai trò:</strong> 
+            {% if current_user.role == 'admin' %}
+                <span class="badge badge-admin">Admin</span>
+            {% else %}
+                <span class="badge badge-customer">Khách hàng</span>
+            {% endif %}
+        </p>
+    </div>
+
+    <section class="bookings-section">
+        <h2>Lịch sử đặt vé</h2>
+        
+        {% if bookings %}
+            <div class="bookings-list">
+                {% for booking in bookings %}
+                    <div class="booking-card">
+                        <div class="booking-header">
+                            <h3>{{ booking.showtime.movie.title }}</h3>
+                            <span class="booking-code">Mã: {{ booking.booking_code }}</span>
+                        </div>
+                        
+                        <div class="booking-details">
+                            <p><strong>📅 Ngày:</strong> {{ booking.showtime.show_date.strftime('%d/%m/%Y') }}</p>
+                            <p><strong>🕐 Giờ:</strong> {{ booking.showtime.show_time.strftime('%H:%M') }}</p>
+                            <p><strong>💺 Ghế:</strong> {{ booking.seat_numbers }}</p>
+                            <p><strong>💰 Giá:</strong> {{ "{:,.0f}".format(booking.total_price) }} đ</p>
+                            <p><strong>✅ Trạng thái:</strong> 
+                                <span class="status-{{ booking.status }}">{{ booking.status }}</span>
+                            </p>
+                        </div>
+
+                        {% if booking.status == 'confirmed' %}
+                            <form method="POST" action="{{ url_for('movie.cancel_booking', booking_id=booking.id) }}" 
+                                  onsubmit="return confirm('Bạn có chắc chắn muốn hủy đơn đặt này?');">
+                                <button type="submit" class="btn btn-danger btn-small">Hủy đơn</button>
+                            </form>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="no-data">Bạn chưa đặt vé nào. <a href="{{ url_for('movie.list_movies') }}">Đặt vé ngay!</a></p>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}
