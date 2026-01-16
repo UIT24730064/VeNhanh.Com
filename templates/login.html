@@ -3,27 +3,177 @@
 {% block title %}Đăng nhập - Movie Booking{% endblock %}
 
 {% block content %}
-<div class="auth-container">
-    <div class="auth-box">
-        <h2 class="fw-bold text-center mb-4">Đăng nhập</h2>
-        
-        <form method="POST" action="{{ url_for('login') }}">
-            <div class="form-group mb-3">
-                <label for="username" class="form-label">Tên đăng nhập:</label>
-                <input name="username" id="username" class="form-control" placeholder="Nhập username" required>
-            </div>
-            
-            <div class="form-group mb-4">
-                <label for="password" class="form-label">Mật khẩu:</label>
-                <input name="password" id="password" type="password" class="form-control" placeholder="Nhập mật khẩu" required>
-            </div>
-            
-            <button type="submit" class="btn btn-primary w-100 fw-bold py-2">ĐĂNG NHẬP</button>
-        </form>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-        <p class="form-footer mt-4 text-center">
-            Chưa có tài khoản? <a href="{{ url_for('register') }}" class="text-decoration-none fw-bold">Đăng ký ngay</a>
-        </p>
+<style>
+    
+    body {
+        font-family: 'Roboto', sans-serif;
+    }
+
+    .auth-wrapper {
+        background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                    url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+        background-size: cover;
+        background-position: center;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+    }
+
+    .auth-card {
+        background: rgba(255, 255, 255, 0.95);
+        border: none;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(10px);
+        overflow: hidden;
+    }
+
+    .card-header-cinema {
+        background: #e50914; 
+        color: white;
+        padding: 30px;
+        text-align: center;
+        border: none;
+    }
+
+    .form-control {
+        border-radius: 10px;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        transition: all 0.3s;
+    }
+
+    .form-control:focus {
+        border-color: #e50914;
+        box-shadow: 0 0 0 0.25 margin-right: rem rgba(229, 9, 20, 0.25);
+    }
+
+    .input-group-text {
+        background: #f8f9fa;
+        border-radius: 10px 0 0 10px;
+        border-right: none;
+    }
+
+    .form-control {
+        border-radius: 0 10px 10px 0;
+    }
+
+    .btn-login {
+        background: #e50914;
+        border: none;
+        border-radius: 10px;
+        padding: 12px;
+        font-weight: bold;
+        letter-spacing: 1px;
+        transition: 0.3s;
+    }
+
+    .btn-login:hover {
+        background: #b20710;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(229, 9, 20, 0.4);
+    }
+
+    .divider {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        color: #777;
+        margin: 25px 0;
+    }
+
+    .divider::before, .divider::after {
+        content: '';
+        flex: 1;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .divider:not(:empty)::before { margin-right: .5em; }
+    .divider:not(:empty)::after { margin-left: .5em; }
+
+    .btn-social {
+        border-radius: 10px;
+        padding: 10px;
+        font-weight: 500;
+        transition: 0.3s;
+    }
+</style>
+
+<div class="auth-wrapper">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-5 col-lg-4">
+                <div class="card auth-card">
+                    <div class="card-header-cinema">
+                        <h3 class="fw-bold mb-0">ĐĂNG NHẬP</h3>
+                        <p class="small mb-0 opacity-75">Tận hưởng thế giới điện ảnh</p>
+                    </div>
+
+                    <div class="card-body p-4 p-md-5">
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                            {% if messages %}
+                                {% for category, message in messages %}
+                                    <div class="alert alert-{{ category }} small py-2">{{ message }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+
+                        <form method="POST" action="{{ url_for('login') }}">
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">Tên đăng nhập</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-user text-muted"></i></span>
+                                    <input name="username" class="form-control" placeholder="username" autofocus required>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <label class="form-label small fw-bold">Mật khẩu</label>
+                                    <a href="#" class="text-decoration-none small text-danger">Quên?</a>
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-lock text-muted"></i></span>
+                                    <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-4 form-check">
+                                <input type="checkbox" class="form-check-input" id="remember">
+                                <label class="form-check-label small text-muted" for="remember">Ghi nhớ tôi</label>
+                            </div>
+
+                            <button type="submit" class="btn btn-login btn-primary w-100 mb-3">
+                                ĐĂNG NHẬP
+                            </button>
+                        </form>
+
+                        <div class="divider">Hoặc</div>
+
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <button class="btn btn-outline-dark btn-social w-100">
+                                    <i class="fa-brands fa-google me-2 text-danger"></i>Google
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button class="btn btn-outline-dark btn-social w-100">
+                                    <i class="fa-brands fa-facebook me-2 text-primary"></i>Facebook
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="mt-5 text-center">
+                            <span class="text-muted small">Bạn mới đến Vé Nhanh?</span><br>
+                            <a href="{{ url_for('register') }}" class="text-decoration-none fw-bold text-danger">Đăng ký ngay</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

@@ -1,6 +1,22 @@
-flask
-flask_sqlalchemy
-flask_login
-flask_socketio
-pymysql
-eventlet
+# Web Framework & Core
+flask>=3.0.0
+werkzeug>=3.0.0
+
+# Database & ORM
+flask_sqlalchemy>=3.1.0
+pymysql>=1.1.0
+sqlalchemy>=2.0.0
+
+# Authentication
+flask_login>=0.6.3
+
+# Real-time Communications
+flask_socketio>=5.3.6
+eventlet>=0.33.3
+
+# Utilities
+qrcode>=7.4.2
+python-dotenv>=1.0.0
+
+# Data processing (Nếu cần xuất báo cáo CSV/Excel nâng cao)
+# pandas>=2.0.0

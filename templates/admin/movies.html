@@ -1,0 +1,70 @@
+{% extends "admin/admin_base.html" %}
+{% block title %}Quản lý phim{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <h1 class="page-title">🎬 Quản lý phim</h1>
+    <a href="{{ url_for('add_movie') }}" class="btn btn-primary">
+        ➕ Thêm phim mới
+    </a>
+</div>
+
+<div class="card-admin">
+    <table class="table table-hover align-middle admin-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Poster</th>
+                <th>Tên phim</th>
+                <th>Thể loại</th>
+                <th>Thời lượng</th>
+                <th>Trạng thái</th>
+                <th class="text-center">Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for movie in movies %}
+            <tr>
+                <td>{{ loop.index }}</td>
+
+                <td>
+                    <img src="{{ url_for('static', filename='images/' + movie.image) }}"
+                         class="movie-thumb">
+                </td>
+
+                <td>
+                    <strong>{{ movie.title }}</strong>
+                </td>
+
+                <td>{{ movie.genre }}</td>
+
+                <td>{{ movie.duration }} phút</td>
+
+                <td>
+                    {% if movie.status == 'showing' %}
+                        <span class="badge bg-success">Đang chiếu</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Ngừng chiếu</span>
+                    {% endif %}
+                </td>
+
+                <td class="text-center">
+                    <a href="{{ url_for('edit_movie', movie_id=movie.id) }}"
+                       class="btn btn-sm btn-warning">
+                        ✏️
+                    </a>
+
+                    <a href="{{ url_for('delete_movie', movie_id=movie.id) }}"
+                       class="btn btn-sm btn-danger"
+                       onclick="return confirm('Bạn chắc chắn muốn xóa phim này?')">
+                        🗑
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

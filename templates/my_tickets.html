@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Vé của tôi - Vé Nhanh{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold">VÉ CỦA TÔI</h3>
+        <span class="badge bg-danger rounded-pill px-3">{{ bookings|length }} đơn hàng</span>
+    </div>
+
+    {% if not bookings %}
+    <div class="text-center py-5 bg-white rounded-4 shadow-sm">
+        <i class="fas fa-ticket-alt fa-4x text-light mb-3"></i>
+        <p class="text-muted fs-5">Bạn chưa có lịch sử đặt vé nào.</p>
+        <a href="{{ url_for('index') }}" class="btn btn-danger rounded-pill px-4">Đặt vé ngay</a>
+    </div>
+    {% else %}
+    <div class="row g-4">
+        {% for booking in bookings %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+                <div class="card-header bg-dark text-white py-2 small fw-bold">
+                    Mã vé: {{ booking.booking_code }}
+                </div>
+                <div class="card-body">
+                    <h5 class="fw-bold text-primary mb-1">{{ booking.showtime.movie.title }}</h5>
+                    <p class="text-muted small mb-3">
+                        <i class="fas fa-map-marker-alt me-1"></i> {{ booking.showtime.theater }}
+                    </p>
+                    
+                    <div class="d-flex justify-content-between small mb-2">
+                        <span class="text-muted">Suất chiếu:</span>
+                        <span class="fw-bold">{{ booking.showtime.show_time.strftime('%H:%M') }} | {{ booking.showtime.show_date.strftime('%d/%m/%Y') }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between small mb-3">
+                        <span class="text-muted">Vị trí ghế:</span>
+                        <span class="fw-bold text-danger">{{ booking.seat_numbers }}</span>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center border-top pt-3">
+                        <span class="fw-bold text-dark fs-5">{{ "{:,.0f}".format(booking.total_price) }} đ</span>
+                        <a href="{{ url_for('booking_success', booking_id=booking.id) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                            Chi tiết
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

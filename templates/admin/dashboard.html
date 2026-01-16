@@ -1,0 +1,40 @@
+{% extends "admin/admin_base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Tổng quan hệ thống</h1>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon bg-primary">📊</div>
+        <div>
+            <p>Tổng đơn đặt</p>
+            <h3>{{ total_bookings }}</h3>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon bg-success">👥</div>
+        <div>
+            <p>Người dùng</p>
+            <h3>{{ total_users }}</h3>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon bg-warning">🎬</div>
+        <div>
+            <p>Phim</p>
+            <h3>{{ total_movies }}</h3>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon bg-danger">💰</div>
+        <div>
+            <p>Doanh thu</p>
+            <h3>{{ "{:,.0f}".format(revenue) }} đ</h3>
+        </div>
+    </div>
+</div>
+{% endblock %}

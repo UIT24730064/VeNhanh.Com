@@ -1,0 +1,114 @@
+{% extends 'admin/admin_base.html' %}
+
+{% block title %}Quản lý Sơ đồ Ghế - Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Quản lý Sơ đồ Ghế</h2>
+        <div class="d-flex gap-2">
+            <select class="form-select" style="width: 200px;">
+                <option selected>Chọn suất chiếu...</option>
+                <option value="1">Lật Mặt 7 - 19:00</option>
+                <option value="2">Dune II - 21:00</option>
+            </select>
+            <button class="btn btn-primary">Lọc</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xl-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body text-center">
+                    <div class="admin-screen-label mb-5">MÀN HÌNH CHÍNH</div>
+                    
+                    <div class="admin-seat-grid">
+                        {% for row in ['A', 'B', 'C', 'D', 'E', 'F', 'G'] %}
+                        <div class="d-flex justify-content-center align-items-center mb-2">
+                            <strong class="me-3">{{ row }}</strong>
+                            {% for col in range(1, 11) %}
+                            <div class="admin-seat-item 
+                                {% if row == 'C' and col == 5 %} occupied 
+                                {% elif row == 'A' %} vip 
+                                {% else %} available {% endif %}"
+                                 data-bs-toggle="tooltip" 
+                                 title="Ghế {{ row }}{{ col }}">
+                                {{ col }}
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mt-4 d-flex justify-content-center gap-4 border-top pt-3">
+                        <span><i class="seat-dot available"></i> Trống</span>
+                        <span><i class="seat-dot vip"></i> VIP</span>
+                        <span><i class="seat-dot occupied"></i> Đã đặt</span>
+                        <span><i class="seat-dot maintenance"></i> Bảo trì</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">Chi tiết trạng thái</div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item d-flex justify-content-between">
+                            Tổng số ghế: <strong>70</strong>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            Đã bán: <strong class="text-danger">15</strong>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            Tỷ lệ lấp đầy: <strong class="text-success">21.4%</strong>
+                        </li>
+                    </ul>
+                    
+                    <div class="admin-actions">
+                        <h6>Thao tác nhanh</h6>
+                        <button class="btn btn-outline-warning w-100 mb-2">Khóa toàn bộ hàng</button>
+                        <button class="btn btn-outline-secondary w-100">Cài đặt loại ghế (VIP/Thường)</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .admin-screen-label {
+        background: #f8f9fa;
+        border: 2px solid #dee2e6;
+        padding: 10px;
+        border-radius: 5px;
+        font-weight: bold;
+        color: #6c757d;
+    }
+    .admin-seat-item {
+        width: 35px;
+        height: 35px;
+        margin: 2px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        color: white;
+    }
+    .available { background-color: #28a745; } /* Xanh: Trống */
+    .vip { background-color: #fd7e14; }       /* Cam: VIP */
+    .occupied { background-color: #dc3545; }  /* Đỏ: Đã bán */
+    .maintenance { background-color: #6c757d; }
+    
+    .seat-dot {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border-radius: 2px;
+        margin-right: 5px;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends "admin/admin_base.html" %}
+{% block title %}Quản lý người dùng{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <h1 class="page-title">👥 Quản lý người dùng</h1>
+</div>
+
+<div class="card-admin">
+    <table class="table table-hover align-middle admin-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Avatar</th>
+                <th>Tên người dùng</th>
+                <th>Email</th>
+                <th>Quyền</th>
+                <th>Trạng thái</th>
+                <th class="text-center">Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ loop.index }}</td>
+
+                <td>
+                    <div class="user-avatar">
+                        {{ user.username[0]|upper }}
+                    </div>
+                </td>
+
+                <td>
+                    <strong>{{ user.username }}</strong>
+                </td>
+
+                <td>{{ user.email }}</td>
+
+                <td>
+                    {% if user.role == 'admin' %}
+                        <span class="badge bg-danger">Admin</span>
+                    {% else %}
+                        <span class="badge bg-primary">User</span>
+                    {% endif %}
+                </td>
+
+                <td>
+                    {% if user.is_active %}
+                        <span class="badge bg-success">Hoạt động</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Bị khóa</span>
+                    {% endif %}
+                </td>
+
+                <td class="text-center">
+                    <a href="{{ url_for('edit_user', user_id=user.id) }}"
+                       class="btn btn-sm btn-warning">
+                        ✏️
+                    </a>
+
+                    {% if user.is_active %}
+                    <a href="{{ url_for('block_user', user_id=user.id) }}"
+                       class="btn btn-sm btn-danger"
+                       onclick="return confirm('Khóa người dùng này?')">
+                        🔒
+                    </a>
+                    {% else %}
+                    <a href="{{ url_for('unblock_user', user_id=user.id) }}"
+                       class="btn btn-sm btn-success"
+                       onclick="return confirm('Mở khóa người dùng này?')">
+                        🔓
+                    </a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

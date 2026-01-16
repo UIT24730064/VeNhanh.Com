@@ -1,0 +1,71 @@
+{% extends "admin/admin_base.html" %}
+{% block title %}Báo cáo & Thống kê{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <h1 class="page-title">📊 Báo cáo & Thống kê</h1>
+</div>
+
+<!-- SUMMARY CARDS -->
+<div class="stats-grid mb-4">
+    <div class="stat-card">
+        <div class="stat-icon bg-primary">🎟</div>
+        <div>
+            <p>Tổng vé bán</p>
+            <h3>{{ total_tickets }}</h3>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon bg-success">💰</div>
+        <div>
+            <p>Doanh thu</p>
+            <h3>{{ "{:,.0f}".format(total_revenue) }} đ</h3>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon bg-warning">🎬</div>
+        <div>
+            <p>Phim bán chạy</p>
+            <h3>{{ best_movie }}</h3>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon bg-danger">👥</div>
+        <div>
+            <p>Khách hàng</p>
+            <h3>{{ total_customers }}</h3>
+        </div>
+    </div>
+</div>
+
+<!-- REPORT TABLE -->
+<div class="card-admin">
+    <h5 class="mb-3">📋 Doanh thu theo phim</h5>
+
+    <table class="table table-hover align-middle admin-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Tên phim</th>
+                <th>Số vé bán</th>
+                <th>Doanh thu</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in report_by_movie %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td><strong>{{ r.movie_title }}</strong></td>
+                <td>{{ r.total_tickets }}</td>
+                <td>{{ "{:,.0f}".format(r.revenue) }} đ</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "admin/admin_base.html" %}
+{% block title %}Quản lý lịch chiếu{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <h1 class="page-title">📅 Quản lý lịch chiếu</h1>
+    <a href="{{ url_for('admin_showtimes') }}" class="btn btn-primary">
+    ➕ Thêm lịch chiếu
+    </a>
+</div>
+
+<div class="card-admin">
+    <table class="table table-hover align-middle admin-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Phim</th>
+                <th>Phòng</th>
+                <th>Ngày</th>
+                <th>Giờ chiếu</th>
+                <th>Giá vé</th>
+                <th class="text-center">Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for st in showtimes %}
+            <tr>
+                <td>{{ loop.index }}</td>
+
+                <td>
+                    <strong>{{ st.movie.title }}</strong>
+                </td>
+
+                <td>Phòng {{ st.room }}</td>
+
+                <td>{{ st.show_date.strftime('%d/%m/%Y') }}</td>
+
+                <td>{{ st.show_time.strftime('%H:%M') }}</td>
+
+                <td>{{ "{:,.0f}".format(st.price) }} đ</td>
+
+                <td class="text-center">
+                    <a href="{{ url_for('edit_showtime', showtime_id=st.id) }}"
+                       class="btn btn-sm btn-warning">
+                        ✏️
+                    </a>
+
+                    <a href="{{ url_for('delete_showtime', showtime_id=st.id) }}"
+                       class="btn btn-sm btn-danger"
+                       onclick="return confirm('Xóa lịch chiếu này?')">
+                        🗑
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

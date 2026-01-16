@@ -3,37 +3,160 @@
 {% block title %}Đăng ký - Movie Booking{% endblock %}
 
 {% block content %}
-<div class="auth-container">
-    <div class="auth-box">
-        <h1>Đăng ký</h1>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-        <form method="POST" action="{{ url_for('register') }}" class="form">
-            <div class="form-group">
-                <label for="username">Tên đăng nhập:</label>
-                <input type="text" id="username" name="username" required>
+<style>
+    .auth-wrapper {
+        background: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)), 
+                    url('https://images.unsplash.com/photo-1478720568477-152d9b164e26?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+        background-size: cover;
+        background-position: center;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        padding: 40px 0;
+    }
+
+    .auth-card {
+        background: rgba(255, 255, 255, 0.98);
+        border: none;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+        overflow: hidden;
+    }
+
+    .card-header-cinema {
+        background: #e50914;
+        color: white;
+        padding: 25px;
+        text-align: center;
+    }
+
+    .form-label { font-size: 0.85rem; color: #555; margin-bottom: 5px; }
+
+    .input-group-text {
+        background: #f8f9fa;
+        border-radius: 10px 0 0 10px;
+        border-right: none;
+        color: #adb5bd;
+    }
+
+    .form-control {
+        border-radius: 0 10px 10px 0;
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+    }
+
+    .form-control:focus {
+        border-color: #e50914;
+        box-shadow: 0 0 0 0.2rem rgba(229, 9, 20, 0.15);
+    }
+
+    .btn-register {
+        background: #e50914;
+        border: none;
+        border-radius: 10px;
+        padding: 12px;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: 0.3s;
+    }
+
+    .btn-register:hover {
+        background: #b20710;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(229, 9, 20, 0.4);
+    }
+
+    /* Thanh đo độ mạnh mật khẩu */
+    .strength-meter {
+        height: 4px;
+        background-color: #eee;
+        margin-top: 8px;
+        border-radius: 2px;
+    }
+    .strength-meter-fill {
+        width: 30%; /* Thay đổi bằng JS */
+        height: 100%;
+        background-color: #ffc107;
+        transition: width 0.3s;
+    }
+</style>
+
+<div class="auth-wrapper">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="card auth-card">
+                    <div class="card-header-cinema">
+                        <h3 class="fw-bold mb-0">TẠO TÀI KHOẢN</h3>
+                        <p class="small mb-0 opacity-75">Tham gia để nhận nhiều ưu đãi đặt vé</p>
+                    </div>
+
+                    <div class="card-body p-4 p-md-5">
+                        <form method="POST" action="{{ url_for('register') }}">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Tên đăng nhập</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+                                    <input type="text" name="username" class="form-control" placeholder="Nhập tên tài khoản" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Email</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
+                                    <input type="email" name="email" class="form-control" placeholder="email@example.com" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Mật khẩu</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
+                                    <input type="password" id="password" name="password" class="form-control" placeholder="Tối thiểu 8 ký tự" required>
+                                </div>
+                                <div class="strength-meter">
+                                    <div class="strength-meter-fill"></div>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">Xác nhận mật khẩu</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-shield-check"></i></span>
+                                    <input type="password" name="confirm_password" class="form-control" placeholder="Nhập lại mật khẩu" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-4 form-check">
+                                <input type="checkbox" class="form-check-input" id="terms" required>
+                                <label class="form-check-label small text-muted" for="terms">
+                                    Tôi đồng ý với <a href="#" class="text-danger">Điều khoản & Chính sách</a>
+                                </label>
+                            </div>
+
+                            <button type="submit" class="btn btn-register btn-primary w-100 shadow-sm">
+                                Đăng ký ngay
+                            </button>
+                        </form>
+
+                        <div class="mt-4 text-center">
+                            <span class="text-muted small">Đã có tài khoản?</span>
+                            <a href="{{ url_for('login') }}" class="text-decoration-none fw-bold text-danger ms-1">Đăng nhập</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-
-            <div class="form-group">
-                <label for="password">Mật khẩu:</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-
-            <div class="form-group">
-                <label for="confirm_password">Xác nhận mật khẩu:</label>
-                <input type="password" id="confirm_password" name="confirm_password" required>
-            </div>
-
-            <button type="submit" class="btn btn-primary btn-block">Đăng ký</button>
-        </form>
-
-        <p class="form-footer">
-            Đã có tài khoản? <a href="{{ url_for('login') }}">Đăng nhập tại đây</a>
-        </p>
+        </div>
     </div>
 </div>
+
+<script>
+    const password = document.getElementById('password');
+</script>
+
 {% endblock %}

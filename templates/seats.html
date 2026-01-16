@@ -1,153 +1,186 @@
 {% extends "base.html" %}
-
 {% block title %}Chọn ghế - {{ showtime.movie.title }}{% endblock %}
 
 {% block content %}
 <div class="container py-5 mt-4">
+    <div id="live-alert-placeholder" class="position-fixed top-0 start-0 end-0 px-3 mt-2" style="z-index:2000"></div>
+
+    <div class="alert alert-warning text-center fw-bold mb-4 shadow-sm">
+        ⏳ Thời gian giữ ghế: <span id="countdown">05:00</span>
+    </div>
+
     <div class="row g-4">
         <div class="col-lg-8">
             <div class="bg-white p-4 rounded-4 shadow-sm border">
-                <div class="screen-container text-center mb-5">
+                <div class="text-center mb-5">
                     <div class="screen-curve"></div>
-                    <span class="text-muted small tracking-widest">MÀN HÌNH / SCREEN</span>
+                    <small class="text-muted">MÀN HÌNH / SCREEN</small>
                 </div>
 
                 <div class="seat-map-wrapper overflow-auto pb-4">
-                    <div class="seat-map d-flex flex-column align-items-center" style="min-width: 600px;">
+                    <div class="seat-map d-flex flex-column align-items-center" style="min-width:600px">
                         {% for row, seats in seats_by_row.items() %}
                         <div class="seat-row d-flex align-items-center mb-2">
-                            <span class="row-label me-3 fw-bold text-secondary">{{ row }}</span>
-                            
-                            {% for seat in seats %}
-                                <div class="seat {{ seat.type }} {{ seat.status }} {% if seat.is_aisle %}me-4{% else %}me-1{% endif %}" 
-                                     data-code="{{ seat.code }}" 
-                                     data-price="{{ showtime.price + (20000 if seat.type == 'vip' else 0) }}"
-                                     title="Ghế {{ seat.code }}">
+                            <span class="row-label me-3">{{ row }}</span>
+                            <div class="d-flex">
+                                {% for seat in seats %}
+                                <div class="seat {{ seat.type|lower }} {{ seat.status|lower }}"
+                                     data-code="{{ seat.code }}"
+                                     data-price="{{ showtime.price + (20000 if seat.type == 'VIP' else 0) }}">
+                                    <small class="seat-num">{{ seat.code[1:] }}</small>
                                 </div>
-                            {% endfor %}
-                            
-                            <span class="row-label ms-3 fw-bold text-secondary">{{ row }}</span>
+                                {% endfor %}
+                            </div>
+                            <span class="row-label ms-3">{{ row }}</span>
                         </div>
                         {% endfor %}
                     </div>
                 </div>
 
-                <div class="legend d-flex flex-wrap justify-content-center mt-5 gap-4 border-top pt-4">
-                    <div class="d-flex align-items-center"><div class="seat normal available me-2"></div> Ghế thường</div>
-                    <div class="d-flex align-items-center"><div class="seat vip available me-2"></div> Ghế VIP</div>
-                    <div class="d-flex align-items-center"><div class="seat selected me-2"></div> Đang chọn</div>
+                <div class="legend d-flex flex-wrap justify-content-center gap-4 border-top pt-4 mt-4">
+                    <div class="d-flex align-items-center"><div class="seat available me-2"></div> Ghế trống</div>
+                    <div class="d-flex align-items-center"><div class="seat selected me-2"></div> Ghế bạn chọn</div>
+                    <div class="d-flex align-items-center"><div class="seat holding me-2"></div> Người khác giữ</div>
                     <div class="d-flex align-items-center"><div class="seat occupied me-2"></div> Đã bán</div>
                 </div>
             </div>
         </div>
 
         <div class="col-lg-4">
-            <div class="card shadow-lg rounded-4 border-0 p-4 sticky-top" style="top: 100px;">
-                <h4 class="fw-bold mb-4 text-danger border-bottom pb-2 text-uppercase">Thông tin đặt vé</h4>
-                
-                <div class="booking-summary mb-4">
-                    <h5 class="fw-bold text-dark mb-1">{{ showtime.movie.title }}</h5>
-                    <p class="text-muted mb-1"><i class="fas fa-map-marker-alt me-2"></i>{{ showtime.theater }}</p>
-                    <p class="text-muted mb-0"><i class="far fa-clock me-2"></i>{{ showtime.show_time.strftime('%H:%M') }} | {{ showtime.show_date.strftime('%d/%m/%Y') }}</p>
-                </div>
+            <div class="card p-4 shadow-lg rounded-4 sticky-top" style="top:100px">
+                <h4 class="fw-bold text-danger mb-3">Thông tin đặt vé</h4>
+                <p class="fw-bold mb-1">{{ showtime.movie.title }}</p>
+                <p class="text-muted mb-1">{{ showtime.theater }}</p>
+                <p class="text-muted mb-3">{{ showtime.show_time }} | {{ showtime.show_date }}</p>
 
-                <div class="price-details bg-light p-3 rounded-3 mb-4">
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Ghế:</span>
-                        <span id="lbl-seats" class="fw-bold text-dark text-end" style="max-width: 150px;">-</span>
-                    </div>
-                    <div class="d-flex justify-content-between border-top pt-2">
-                        <span class="fs-5 fw-bold">Tổng tiền:</span>
-                        <span class="fs-5 fw-bold text-danger"><span id="lbl-total">0</span> VNĐ</span>
-                    </div>
-                </div>
-
-                <form action="{{ url_for('book_tickets') }}" method="POST">
+                <form method="POST" action="{{ url_for('book_tickets') }}">
                     <input type="hidden" name="showtime_id" value="{{ showtime.id }}">
                     <input type="hidden" name="seat_numbers" id="input-seats">
-                    <button type="submit" id="btn-book" class="btn btn-danger w-100 py-3 fw-bold rounded-pill shadow" disabled>
-                        XÁC NHẬN ĐẶT VÉ
-                    </button>
+
+                    <input class="form-control mb-2" id="cust-name" name="customer_name" placeholder="Họ tên" required>
+                    <input class="form-control mb-3" id="cust-phone" name="customer_phone" placeholder="SĐT" required>
+
+                    <div class="bg-light p-3 rounded border mb-3">
+                        <div class="d-flex justify-content-between">
+                            <span>Ghế:</span>
+                            <strong id="lbl-seats">-</strong>
+                        </div>
+                        <div class="d-flex justify-content-between mt-2 border-top pt-2">
+                            <span>Tổng tiền:</span>
+                            <strong class="text-danger"><span id="lbl-total">0</span> VNĐ</strong>
+                        </div>
+                    </div>
+                    <button id="btn-book" class="btn btn-danger w-100 fw-bold" disabled>XÁC NHẬN ĐẶT VÉ</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
-</style>
 
-<div class="container main-content-wrapper mb-5">
-    </div>
 <style>
-    /* Màn hình cong */
-    .screen-curve {
-        height: 12px;
-        width: 80%;
-        background: #03204c;
-        margin: 0 auto 10px;
-        border-radius: 50% / 100% 100% 0 0;
-        box-shadow: 0 10px 15px rgba(3, 32, 76, 0.2);
-    }
-    .tracking-widest { letter-spacing: 0.3em; }
-
-    /* Thiết kế ghế */
-    .seat {
-        width: 28px;
-        height: 26px;
-        border-radius: 4px 4px 10px 10px;
-        cursor: pointer;
-        transition: 0.2s;
-        border: 1px solid #ced4da;
-    }
-    .seat.available.normal { background: #fff; }
-    .seat.available.vip { background: #fff3cd; border-color: #ffc107; }
-    
-    /* Ghế đang chọn màu đỏ chuẩn thương hiệu */
-    .seat.selected { 
-        background: #e71a0f !important; 
-        border-color: #e71a0f; 
-        transform: scale(1.15);
-        box-shadow: 0 0 8px rgba(231, 26, 15, 0.5);
-    }
-    
-    .seat.occupied { 
-        background: #bbbbbb; 
-        cursor: not-allowed; 
-        border-color: #999;
-    }
-    
-    .seat:hover:not(.occupied) { 
-        border-color: #e71a0f;
-    }
-
-    .row-label { width: 25px; font-size: 0.85rem; }
-    .btn-danger { background-color: #e71a0f; border: none; }
+.screen-curve{height:8px;width:80%;background:#03204c;border-radius:50%/100% 100% 0 0;margin:auto}
+.seat{width:32px;height:30px;border-radius:6px;border:1px solid #ccc;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-right:4px}
+.seat-num{font-size:10px;color:#999}
+.seat.available{background:#fff}
+.seat.selected{background:#e71a0f;border-color:#e71a0f} /* Màu đỏ cho ghế bạn chọn */
+.seat.selected .seat-num{color:#fff}
+.seat.holding{background:#ffc107;border-color:#ffc107;cursor:not-allowed} /* Màu vàng cho ghế người khác giữ */
+.seat.occupied{background:#adb5bd;border-color:#adb5bd;cursor:not-allowed}
+.row-label{font-weight:bold;color:#666}
+.alert-toast{background:#f8d7da;color:#842029;padding:10px 20px;border-radius:30px}
 </style>
 
+<script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
 <script>
+document.addEventListener("DOMContentLoaded", () => {
+    const socket = io();
+    const SHOWTIME_ID = "{{ showtime.id }}";
     let selectedSeats = [];
     let totalPrice = 0;
 
-    document.querySelectorAll('.seat.available').forEach(seat => {
-        seat.addEventListener('click', () => {
-            const seatCode = seat.getAttribute('data-code');
-            const seatPrice = parseInt(seat.getAttribute('data-price'));
+    const lblSeats = document.getElementById("lbl-seats");
+    const lblTotal = document.getElementById("lbl-total");
+    const inputSeats = document.getElementById("input-seats");
+    const btnBook = document.getElementById("btn-book");
+    const nameInput = document.getElementById("cust-name");
+    const phoneInput = document.getElementById("cust-phone");
+    const alertBox = document.getElementById("live-alert-placeholder");
 
-            if (seat.classList.contains('selected')) {
-                seat.classList.remove('selected');
-                selectedSeats = selectedSeats.filter(s => s !== seatCode);
-                totalPrice -= seatPrice;
-            } else {
-                seat.classList.add('selected');
-                selectedSeats.push(seatCode);
-                totalPrice += seatPrice;
-            }
+    function toast(msg){
+        alertBox.innerHTML = `<div class="d-flex justify-content-center"><div class="alert-toast">${msg}</div></div>`;
+        setTimeout(() => alertBox.innerHTML = "", 4000);
+    }
 
-            // Cập nhật giao diện thanh toán
-            document.getElementById('lbl-seats').innerText = selectedSeats.length > 0 ? selectedSeats.sort().join(', ') : '-';
-            document.getElementById('lbl-total').innerText = totalPrice.toLocaleString('vi-VN');
-            document.getElementById('input-seats').value = selectedSeats.join(',');
-            document.getElementById('btn-book').disabled = selectedSeats.length === 0;
+    function updateUI(){
+        lblSeats.innerText = selectedSeats.join(", ") || "-";
+        lblTotal.innerText = totalPrice.toLocaleString("vi-VN");
+        inputSeats.value = selectedSeats.join(",");
+        btnBook.disabled = !(selectedSeats.length && nameInput.value && phoneInput.value);
+    }
+
+    // ĐỒNG BỘ SID: Quan trọng để tránh lỗi "Ghế không hợp lệ"
+    socket.on("connect", () => {
+        fetch("/update_socket_sid", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ sid: socket.id })
         });
     });
+
+    /* 1. CLICK CHỌN GHẾ */
+    document.querySelectorAll(".seat").forEach(seat => {
+        seat.addEventListener("click", () => {
+            const code = seat.dataset.code;
+            if (seat.classList.contains('available')) {
+                // Gửi yêu cầu giữ ghế lên server
+                socket.emit("hold_seat", { showtime_id: SHOWTIME_ID, seat_code: code });
+            } else if (seat.classList.contains('selected')) {
+                // Gửi yêu cầu bỏ chọn ghế
+                socket.emit("release_seat", { showtime_id: SHOWTIME_ID, seat_code: code });
+            }
+        });
+    });
+
+    /* 2. CHỈ KHI SERVER XÁC NHẬN GIỮ THÀNH CÔNG MỚI ĐỔI MÀU ĐỎ */
+    socket.on("hold_success", data => {
+        const seat = document.querySelector(`[data-code="${data.seat_code}"]`);
+        if (seat && !selectedSeats.includes(data.seat_code)) {
+            seat.className = "seat selected"; // Hiện màu đỏ (Của bạn)
+            selectedSeats.push(data.seat_code);
+            totalPrice += parseInt(seat.dataset.price);
+            updateUI();
+        }
+    });
+
+    /* 3. CẬP NHẬT TRẠNG THÁI TỪ HỆ THỐNG HOẶC NGƯỜI KHÁC */
+    socket.on("seat_update", data => {
+        const seat = document.querySelector(`[data-code="${data.seat_code}"]`);
+        if (!seat) return;
+
+        if (data.status === "holding") {
+            // Chỉ hiện màu vàng nếu ghế đó KHÔNG phải do chính bạn đang giữ
+            if (!selectedSeats.includes(data.seat_code)) {
+                seat.className = "seat holding";
+            }
+        } else if (data.status === "available") {
+            seat.className = "seat available";
+            // Nếu là ghế bạn đang chọn mà bị server giải phóng (hết hạn giữ)
+            if (selectedSeats.includes(data.seat_code)) {
+                selectedSeats = selectedSeats.filter(s => s !== data.seat_code);
+                totalPrice -= parseInt(seat.dataset.price);
+                updateUI();
+            }
+        } else if (data.status === "booked") {
+            seat.className = "seat occupied";
+        }
+    });
+
+    socket.on("hold_failed", data => {
+        toast(`Ghế ${data.seat_code} đã có người khác chọn nhanh hơn!`);
+    });
+
+    nameInput.addEventListener("input", updateUI);
+    phoneInput.addEventListener("input", updateUI);
+});
 </script>
 {% endblock %}
