@@ -32,7 +32,7 @@ Vé Nhanh là hệ thống đặt vé xem phim trực tuyến cho phép người
   
 ## Tính Năng Chính
 - Quản lý phim (showing/upcoming), suất chiếu (theater, time, price).
-- Chọn ghế real-time: available/holding/booked, hold 10 phút tự release.
+- Chọn ghế real-time: available/holding/booked, hold 5 phút tự release.
 - User auth (login/register), booking với QR code, profile, admin dashboard.
 - Tích hợp promo: combo bắp giảm 20%, thứ Hai 45k, sinh viên 50k.
 - Real-time updates qua Flask-SocketIO.
