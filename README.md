@@ -1,13 +1,19 @@
 # HƯỚNG DẪN CÀI ĐẶT VÀ CHẠY DỰ ÁN
 
 ## Cài Đặt
-- Cài Python 3.8+, MySQL Server.
-- `pip install -r requirements.txt` (Flask, SQLAlchemy, SocketIO, etc.).
-- Chạy `database.py` trong MySQL tạo DB `cinemadb` (tables movies/shows/seats/seatholds/tickets).
-- Tạo `config.py`:
-- Seed data phim/shows/seats từ database.py.
-- `python app.py` (hoặc main.py nếu có), truy cập `http://localhost:5000`.
-
+- Cài Python 3.8+
+  Cài đặt môi trường và thư viện
+1 nhắn tổ hợp Window + R -> cmd
+2 cd C:\python\venhanh (chọn đúng đường dẫn lưu file sau khi tải xuống hoàn tất)
+3 python -m venv .venv : Tạo môi trường giả lập
+4 .venv\Scripts\activate : Khởi động môi trưởng giả lập
+5 pip install -r requirements.txt : nhập tiếp câu lệch khởi tạo
+6 pip install qrcode pillow : Khởi tạo QR
+7 python app.py: web khởi chạy trên môi trường giả lập
+  sẽ tạo tự động user admin
+  User: admin
+  Pass: admin123
+  truy cập http://127.0.0.1:5000
 ## Tính Năng Chính
 - Quản lý phim (showing/upcoming), suất chiếu (theater, time, price).
 - Chọn ghế real-time: available/holding/booked, hold 10 phút tự release.
@@ -22,26 +28,40 @@
 - Admin: Quản lý shows, revenue query từ database.py.
 
 ## Cấu trúc thư mục dự án
-project/
-├── database.py # SQL schema + samples
-├── models.py # Flask-SQLAlchemy ORM
-├── seats.js # Frontend seat selection SocketIO
-├── requirements.txt # Dependencies
-├── static/images/ # Posters & promos
-│ ├── cgv_q7.jpg
-│ ├── cgv_thuduc.jpg
-│ ├── nha-tran-quy.jpg
-│ ├── nha-hai-chu.jpg
-│ ├── con-ke-ba-nghe.jpg
-│ ├── thien-duong-mau.jpg
-│ ├── logo.jpg
-│ ├── promo_combo.jpg
-│ ├── promo_monday.jpg
-│ └── promo_student.jpg
-└── templates/ # HTML (seats.html dùng seats.js)
-
-## Troubleshooting
-- **No tables**: Chạy lại database.py.
-- **Socket errors**: Cài eventlet, chạy với `eventlet.run()`.
-- **MySQL connect**: Kiểm tra URI trong config.
-- Thiếu app.py/main.py/routes: Dựa models tạo Flask app cơ bản với SocketIO.
+venhanh/
+│
+├── app.py
+├── config.py
+├── requirements.txt
+├── models.py
+│
+├── static/
+│   ├── css/
+│   ├── js/
+│   └── images/
+│
+├── templates/
+│   ├── base.html
+│   ├── index.html
+│   ├── login.html
+│   ├── register.html
+│   ├── movie.html
+│   ├── showtime.html
+│   ├── seats.html
+│   ├── confirmation.html
+│   ├── booking_success.html
+│   ├── my_tickets.html
+│   ├── profile.html
+│   ├── rap_phim.html
+│   ├── khuyen_mai.html
+│   │
+│   └── admin/
+│       ├── admin_base.html
+│       ├── dashboard.html
+│       ├── movies.html
+│       ├── showtimes.html
+│       ├── seats.html
+│       ├── users.html
+│       └── reports.html
+│
+└── README.md
