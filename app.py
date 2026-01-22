@@ -658,4 +658,5 @@ def export_csv():
     return output 
 
 if __name__ == "__main__":
+    create_super_admin()
     socketio.run(app, debug=True)
